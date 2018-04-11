@@ -8,7 +8,7 @@ Email signature
 - Select all and copy, then paste in your email settings
 - Save Changes
 - Reload page
-- **ATTN:** Now manually add `text-decoration:none !important; text-decoration:none;` AGAIN with Inspect Elements
+- **ATTN:** Now manually add `text-decoration:none !important; text-decoration:none;` AGAIN to the `<a>`s with Inspect Elements
 - Make a (silly) change to the signature to re-enable the "Save Changes" button
 - Save Changes
 
