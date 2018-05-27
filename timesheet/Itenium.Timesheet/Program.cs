@@ -3,6 +3,7 @@ using System.Drawing;
 using System.Globalization;
 using System.IO;
 using OfficeOpenXml;
+using OfficeOpenXml.Style;
 
 namespace Itenium.Timesheet
 {
@@ -12,19 +13,30 @@ namespace Itenium.Timesheet
         {
             using (var package = new ExcelPackage())
             {
-                for (int i = 1; i <= 12; i++)
+                AddWorkaroundStyles(package);
+
+                for (int month = 1; month <= 12; month++)
                 {
-                    string monthName = CultureInfo.InvariantCulture.DateTimeFormat.GetAbbreviatedMonthName(i);
+                    string monthName = CultureInfo.InvariantCulture.DateTimeFormat.GetAbbreviatedMonthName(month);
                     var sheet = package.Workbook.Worksheets.Add(monthName);
 
-                    string logoPath = Directory.GetCurrentDirectory() + @"\itenium-logo.png";
-                    var picture = sheet.Drawings.AddPicture("itenium logo", Image.FromFile(logoPath));
-                    picture.SetPosition(0, 0, 2, 0);
+                    var projectDetails = new ProjectDetails(month);
+                    var builder = new ExcelSheetBuilder(sheet, projectDetails);
+                    builder.Build();
                 }
 
                 var saveExcelAs = Directory.GetCurrentDirectory() + $"\\..\\itenium-{DateTime.Now.Year}.xlsx";
                 package.SaveAs(new FileInfo(saveExcelAs));
             }
+        }
+
+        private static void AddWorkaroundStyles(ExcelPackage package)
+        {
+            var rightStyle = package.Workbook.Styles.CreateNamedStyle("Right");
+            rightStyle.Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
+
+            var centerStyle = package.Workbook.Styles.CreateNamedStyle("Center");
+            centerStyle.Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
         }
     }
 }

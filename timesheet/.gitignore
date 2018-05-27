@@ -12,3 +12,7 @@ bld/
 
 Itenium.Timesheet.csproj.user
 .vs
+
+
+itenium-*.xlsx
+.~lock.itenium-*.xlsx#
