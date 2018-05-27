@@ -11,7 +11,8 @@ namespace Itenium.Timesheet
 {
     public class ExcelSheetBuilder
     {
-        private const string TimesheetEmail = "timesheet@itenium.be";
+        private const string TimesheetEmail = "invoice@itenium.be";
+        private const string TimesheetNotice = "Please send back duly signed document together with your invoice by the 2nd working day of the following month to:";
 
         private readonly ExcelWorksheet _sheet;
         private readonly ProjectDetails _details;
@@ -32,7 +33,7 @@ namespace Itenium.Timesheet
 
             _sheet.Row(2).Height = 10;
             _sheet.Row(3).Height = 30;
-            _sheet.Row(4).Height = 10;
+            _sheet.Row(4).Height = 7;
 
             _sheet.Column(4).Width = 5;
             _sheet.Column(11).Width = 3;
@@ -126,7 +127,11 @@ namespace Itenium.Timesheet
             table.Style.Border.BorderAround(ExcelBorderStyle.Medium);
             _sheet.Cells[startRow, 2, startRow, 5].Style.Border.Bottom.Style = ExcelBorderStyle.Medium;
 
-            _sheet.Cells[currentRow + 2, 2].Value = "Please send back duly signed document by the 3rd working day of the following month to:";
+            _sheet.Cells[currentRow + 2, 2].StyleName = "Center";
+            _sheet.Cells[currentRow + 2, 2].Value = TimesheetNotice;
+            _sheet.Cells[currentRow + 2, 2].Style.WrapText = true;
+            _sheet.Cells[currentRow + 2, 2, currentRow + 2, 9].Merge = true;
+            _sheet.Row(currentRow + 2).Height = 25;
 
             _sheet.Cells[currentRow + 3, 2, currentRow + 3, 9].Merge = true;
             _sheet.Cells[currentRow + 3, 2].StyleName = "Center";
@@ -142,7 +147,7 @@ namespace Itenium.Timesheet
         {
             string logoPath = Directory.GetCurrentDirectory() + @"\itenium-logo.png";
             var picture = _sheet.Drawings.AddPicture("itenium logo", Image.FromFile(logoPath));
-            picture.SetPosition(25, 50);
+            picture.SetPosition(28, 50);
 
             _sheet.Cells["F3"].Value = "TIMESHEET";
             _sheet.Cells["F3"].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
