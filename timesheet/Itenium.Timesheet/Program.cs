@@ -32,11 +32,14 @@ namespace Itenium.Timesheet
 
         private static void AddWorkaroundStyles(ExcelPackage package)
         {
-            var rightStyle = package.Workbook.Styles.CreateNamedStyle("Right");
-            rightStyle.Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
+            var leftStyle = package.Workbook.Styles.CreateNamedStyle("Left");
+            leftStyle.Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
 
             var centerStyle = package.Workbook.Styles.CreateNamedStyle("Center");
             centerStyle.Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+
+            var rightStyle = package.Workbook.Styles.CreateNamedStyle("Right");
+            rightStyle.Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
         }
     }
 }

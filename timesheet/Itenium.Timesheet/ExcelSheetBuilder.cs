@@ -16,6 +16,9 @@ namespace Itenium.Timesheet
         private readonly ExcelWorksheet _sheet;
         private readonly ProjectDetails _details;
 
+        private int _startRow = 10;
+        private int _endRow;
+
         public ExcelSheetBuilder(ExcelWorksheet sheet, ProjectDetails details)
         {
             _sheet = sheet;
@@ -38,22 +41,53 @@ namespace Itenium.Timesheet
 
             AddMonthTable();
 
-            // TODO: manager signature etc
-            // TODO: Add totals
-            // TODO: Add holidays
+            AddAsideTable();
+        }
+
+        private void AddAsideTable()
+        {
+            _sheet.Column(6).Width = 3;
+            _sheet.Column(7).Width = 2;
+            _sheet.Column(9).Width = 27;
+            _sheet.Column(10).Width = 2;
+
+            _sheet.Cells["H10"].HeaderLabel("Project");
+            _sheet.Cells["I10"].Value = _details.ProjectName;
+
+            _sheet.Cells["I11"].StyleName = "Left";
+            _sheet.Cells["H11"].HeaderLabel("Total Time");
+            _sheet.Cells["I11"].Formula = $"SUM(C{_startRow + 1}:C{_endRow})";
+            _sheet.Cells["I11"].Style.Numberformat.Format = "[HH]:MM";
+
+            _sheet.Cells["I12"].StyleName = "Left";
+            _sheet.Cells["H12"].HeaderLabel("Days");
+            _sheet.Cells["I12"].Formula = "ROUND(I11, 2)";
+
+            _sheet.Cells["H14"].HeaderLabel("Manager");
+
+            _sheet.Cells["I14"].Style.Fill.PatternType = ExcelFillStyle.Solid;
+
+            _sheet.Cells["H15"].HeaderLabel("Signature");
+
+            _sheet.Cells[10, 7, 20, 10].Style.Border.BorderAround(ExcelBorderStyle.Medium);
+            _sheet.Cells[10, 7, 20, 10].Style.Fill.PatternType = ExcelFillStyle.Solid;
+            _sheet.Cells[10, 7, 20, 10].Style.Fill.BackgroundColor.SetColor(Color.White);
+
+            _sheet.Cells["I14"].Style.Fill.BackgroundColor.SetColor(Color.LightBlue);
+            _sheet.Cells["I14"].Style.Border.BorderAround(ExcelBorderStyle.Thin);
         }
 
         private void AddMonthTable()
         {
-            int startRow = 10;
+            int startRow = _startRow;
 
             int currentRow = startRow;
             _sheet.Row(startRow).Height = 18;
 
             _sheet.Cells[currentRow, 2].TableHeader("Day");
             _sheet.Cells[currentRow, 3].TableHeader("# Hours");
-            _sheet.Cells[currentRow, 3, currentRow, 4].Merge = true;
-            _sheet.Cells[currentRow, 2, currentRow, 4].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
+            _sheet.Cells[currentRow, 3, currentRow, 5].Merge = true;
+            _sheet.Cells[currentRow, 2, currentRow, 5].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
             currentRow++;
 
             foreach (var day in _details.GetDaysInMonth())
@@ -61,31 +95,47 @@ namespace Itenium.Timesheet
                 _sheet.Cells[currentRow, 2].Value = day;
                 _sheet.Cells[currentRow, 2].StyleName = "Center";
 
-                _sheet.Cells[currentRow, 3, currentRow, 4].Merge = true;
+                _sheet.Cells[currentRow, 3, currentRow, 5].Merge = true;
                 _sheet.Cells[currentRow, 3].StyleName = "Center";
 
                 if (day.IsHoliday)
                 {
-                    _sheet.Cells[currentRow, 2, currentRow, 4].Style.Fill.PatternType = ExcelFillStyle.Solid;
-                    _sheet.Cells[currentRow, 2, currentRow, 4].Style.Fill.BackgroundColor.SetColor(Color.LightGray);
+                    _sheet.Cells[currentRow, 3].StyleName = "";
+                    _sheet.Cells[currentRow, 2, currentRow, 5].Style.Fill.PatternType = ExcelFillStyle.Solid;
+                    _sheet.Cells[currentRow, 2, currentRow, 5].Style.Fill.BackgroundColor.SetColor(Color.LightGray);
+
+                    _sheet.Cells[currentRow, 3].Value = day.GetHolidayDesc();
+                }
+                else
+                {
+                    _sheet.Cells[currentRow, 3].Style.Numberformat.Format = "H:MM";
                 }
 
                 currentRow++;
             }
 
             currentRow--;
+            _endRow = currentRow;
 
-            var table = _sheet.Cells[startRow, 2, currentRow, 4];
+            var table = _sheet.Cells[startRow, 2, currentRow, 5];
             table.Style.Border.Top.Style = ExcelBorderStyle.Thin;
             table.Style.Border.Left.Style = ExcelBorderStyle.Thin;
             table.Style.Border.Right.Style = ExcelBorderStyle.Thin;
             table.Style.Border.Bottom.Style = ExcelBorderStyle.Thin;
 
             table.Style.Border.BorderAround(ExcelBorderStyle.Medium);
-            _sheet.Cells[startRow, 2, startRow, 4].Style.Border.Bottom.Style = ExcelBorderStyle.Medium;
+            _sheet.Cells[startRow, 2, startRow, 5].Style.Border.Bottom.Style = ExcelBorderStyle.Medium;
 
+            _sheet.Cells[currentRow + 2, 2].Value = "Please send back duly signed document by the 3rd working day of the following month to:";
 
-            _sheet.Cells[currentRow + 2, 2].Value = $"Please send back duly signed document by the 3rd working day of the following month to {TimesheetEmail}";
+            _sheet.Cells[currentRow + 3, 2, currentRow + 3, 9].Merge = true;
+            _sheet.Cells[currentRow + 3, 2].StyleName = "Center";
+
+            var ourEmailCell = _sheet.Cells[currentRow + 3, 2];
+            ourEmailCell.Hyperlink = new Uri("mailto:" + TimesheetEmail, UriKind.Absolute);
+            ourEmailCell.Value = TimesheetEmail;
+            ourEmailCell.Style.Font.Color.SetColor(Color.Blue);
+            ourEmailCell.Style.Font.UnderLine = true;
         }
 
         private void AddHeader()
@@ -124,8 +174,6 @@ namespace Itenium.Timesheet
             _sheet.Cells["B6:J8"].Style.Border.BorderAround(ExcelBorderStyle.Medium);
             _sheet.Cells["B6:J8"].Style.Fill.PatternType = ExcelFillStyle.Solid;
             _sheet.Cells["B6:J8"].Style.Fill.BackgroundColor.SetColor(Color.White);
-
-            _sheet.Row(9).Height = 10;
         }
     }
 }

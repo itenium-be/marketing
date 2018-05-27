@@ -1,24 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Text;
 
 namespace Itenium.Timesheet
 {
-    public class DayInfo
-    {
-        private readonly DateTime _date;
-
-        public bool IsHoliday => _date.DayOfWeek == DayOfWeek.Saturday || _date.DayOfWeek == DayOfWeek.Sunday;
-
-        public DayInfo(int year, int month, int day)
-        {
-            _date = new DateTime(year, month, day);
-        }
-
-        public override string ToString() => $"{_date.ToString("ddd", CultureInfo.InvariantCulture)}, {_date.Day.ToOrdinal()}";
-    }
-
     public class ProjectDetails
     {
         public string ConsultantName { get; set; }
@@ -48,7 +33,6 @@ namespace Itenium.Timesheet
             CustomerReference = "IOR1804019";
 
             ProjectName = "Focus";
-            // TODO: Manager?
         }
 
         public override string ToString() => $"{ConsultantName} ({Year}-{Month}) @{Customer}";
