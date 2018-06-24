@@ -131,7 +131,7 @@ namespace Itenium.Timesheet
             _sheet.Cells[currentRow + 2, 2].Value = TimesheetNotice;
             _sheet.Cells[currentRow + 2, 2].Style.WrapText = true;
             _sheet.Cells[currentRow + 2, 2, currentRow + 2, 9].Merge = true;
-            _sheet.Row(currentRow + 2).Height = 25;
+            _sheet.Row(currentRow + 2).Height = 28;
 
             _sheet.Cells[currentRow + 3, 2, currentRow + 3, 9].Merge = true;
             _sheet.Cells[currentRow + 3, 2].StyleName = "Center";
