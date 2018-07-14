@@ -25,6 +25,8 @@ namespace Itenium.Timesheet
                     builder.Build();
                 }
 
+                package.Workbook.Worksheets[DateTime.Now.Month].Select();
+
                 var saveExcelAs = Directory.GetCurrentDirectory() + $"\\..\\itenium-timesheet-{DateTime.Now.Year}.xlsx";
                 package.SaveAs(new FileInfo(saveExcelAs));
             }
