@@ -30,7 +30,7 @@ namespace Itenium.Timesheet
             Month = month;
 
             Customer = "Digipolis";
-            CustomerReference = "IOR1804019, ION1807311";
+            CustomerReference = "IOR1804019";
 
             ProjectName = "Focus";
         }
