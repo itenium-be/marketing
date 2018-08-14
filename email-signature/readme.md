@@ -3,6 +3,7 @@ Email signature
 
 ![Signature example](example_signature.PNG)
 
+- In gmail, goto Settings > General > Signature
 - Edit `signature.html`
 - Open signature.html in a browser
 - Select all and copy, then paste in your email settings
