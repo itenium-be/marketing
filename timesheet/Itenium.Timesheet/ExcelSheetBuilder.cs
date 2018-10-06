@@ -17,7 +17,7 @@ namespace Itenium.Timesheet
         private readonly ExcelWorksheet _sheet;
         private readonly ProjectDetails _details;
 
-        private int _startRow = 10;
+        private readonly int _startRow = 10;
         private int _endRow;
 
         public ExcelSheetBuilder(ExcelWorksheet sheet, ProjectDetails details)
@@ -145,7 +145,8 @@ namespace Itenium.Timesheet
 
         private void AddHeader()
         {
-            string logoPath = Directory.GetCurrentDirectory() + @"\itenium-logo.png";
+            var currentDllPath = new FileInfo(Environment.GetCommandLineArgs()[0]);
+            string logoPath = currentDllPath.DirectoryName + @"\itenium-logo.png";
             var picture = _sheet.Drawings.AddPicture("itenium logo", Image.FromFile(logoPath));
             picture.SetPosition(28, 50);
 

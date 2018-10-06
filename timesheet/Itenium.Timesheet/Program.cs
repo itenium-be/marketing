@@ -27,8 +27,12 @@ namespace Itenium.Timesheet
 
                 package.Workbook.Worksheets[DateTime.Now.Month].Select();
 
-                var saveExcelAs = Directory.GetCurrentDirectory() + $"\\..\\itenium-timesheet-{DateTime.Now.Year}.xlsx";
+                var currentDllPath = new FileInfo(Environment.GetCommandLineArgs()[0]);
+                var saveExcelAs = currentDllPath.DirectoryName + $"\\itenium-timesheet-{DateTime.Now.Year}.xlsx";
                 package.SaveAs(new FileInfo(saveExcelAs));
+
+                Console.WriteLine("Timesheet template saved as:");
+                Console.WriteLine(saveExcelAs);
             }
         }
 
