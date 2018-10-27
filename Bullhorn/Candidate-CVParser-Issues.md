@@ -11,12 +11,11 @@ Candidate CV Parser Issues
 
 # Manual fields
 
-
 - **Title**: Do not forget to change this for female candidates
 - **Start year IT career**
 - **Date of birth**
-- **Employment Preference**
-- **Desired Locations**: If provided by the consultant (often a freelancer gives an indication in the email with his CV)
+- **Employment Preference**: Contract for freelancers. Permanent for payroll consultants.
+- **Desired Locations**: If provided by the consultant (often a freelancer gives an indication in the email with his CV) Sometimes this may include something like "must be reachable by public transportation". This kind of information can be added to "General Comments".
 - **Notice Period / Date Available / Recontact Date**
 - **Source**: To make sure we don't accidently violate the terms of a contract, always fill in this field.
 - **LinkedIn Url**
