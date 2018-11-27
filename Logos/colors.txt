@@ -1,2 +1,2 @@
-gray: 7e7e7e
-orange: e78200
+gray: 7e7e7e - rgb(126, 126, 126)
+orange: e78200 - rgb(231, 130, 0)
